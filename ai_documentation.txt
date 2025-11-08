@@ -64,3 +64,26 @@ def teardown_module(module):
 These two functions are special names in pytest that handle setup and teardown tasks. They automatically create the necessary file before tests start, and clean it up after tests are finished.
 
 Let me know if you need anything else!
+
+_________________________________
+
+How can I test the utils file? How can I generate the data?
+
+=> 
+
+import numpy as np
+from ligotools.utils import whiten, reqshift
+
+def test_reqshift_shape():
+    data = np.arange(100)
+    shifted = reqshift(data, 100, 10)
+    assert shifted.shape == data.shape
+
+def test_whiten_mean_std():
+    data = np.random.randn(1000)
+    fs = 4096
+    Pxx = np.ones(1000)
+    dt = 1.0 / fs
+    white_data = whiten(data, Pxx, dt)
+    assert np.isclose(np.mean(white_data), 0, atol=1e-1)
+    assert np.isclose(np.std(white_data), 1, atol=1e-1)
